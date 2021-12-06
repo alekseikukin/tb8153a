@@ -3,7 +3,7 @@ classdef A8153_control < handle
         c_gpib
     end
     properties(SetAccess = private)
-        close_port
+        close_port % open and close connection for each command
     end
     methods
         function obj = A8153_control(boardindex,primaryaddress, varargin)
