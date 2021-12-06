@@ -35,8 +35,10 @@ classdef A8153_control < handle
             if ~obj.isopen()
                 fopen(obj.c_gpib);
             end
-            fprintf(obj.c_gpib,'*IDN?');
-            inform = fscanf(obj.c_gpib);
+            obj.Fprintf('*IDN?');
+            inform = obj.Fscanf();
+%             fprintf(obj.c_gpib,'*IDN?');
+%             inform = fscanf(obj.c_gpib);
             if obj.close_port
                 fclose(obj.c_gpib);
             end
@@ -45,6 +47,7 @@ classdef A8153_control < handle
             inform = propinfo(obj.c_gpib);
         end
         function satus = Fprintf(obj, varargin)
+            %Fprintf - send command to device, return result
             if isempry(varargin)
                 error('you need write 1 or more comands')
             end
@@ -54,9 +57,11 @@ classdef A8153_control < handle
             end
         end
         function inform = Fscanf(obj)
+            %Fscanf - return data from bufer of device
             inform = fscanf(obj.c_gpib);
         end
         function info = Fopen(obj)
+            %Fopen - connect to device
             if ~obj.isopen()
                 fopen(obj.c_gpib);
             end
@@ -64,6 +69,7 @@ classdef A8153_control < handle
             
         end
         function info = Fclose(obj)
+            %Fclose - cancel connection to device
             fclose(obj.c_gpib);
             info = obj.c_gpib.Status;
         end
