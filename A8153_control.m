@@ -26,9 +26,8 @@ classdef A8153_control < handle
             fprintf(obj.c_gpib,'*IDN?');
             int_result = fscanf(obj.c_gpib);
             disp(int_result);
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function inform = IDN(obj)
             % *IDN? Identication Query
@@ -37,9 +36,8 @@ classdef A8153_control < handle
             inform = obj.Fscanf();
             %             fprintf(obj.c_gpib,'*IDN?');
             %             inform = fscanf(obj.c_gpib);
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function inform = Propinfo(obj)
             inform = propinfo(obj.c_gpib);
@@ -60,9 +58,7 @@ classdef A8153_control < handle
         end
         function info = Fopen(obj)
             %Fopen - connect to device
-            if ~obj.isopen()
-                fopen(obj.c_gpib);
-            end
+            obj.OpenIfNeed();
             info = obj.c_gpib.Status;
 
         end
@@ -81,9 +77,8 @@ classdef A8153_control < handle
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'*ESE?');
             inform = fscanf(obj.c_gpib);
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function inform = StandardEventStatus(obj)
             % *ESR? Standard Event Status Register Query
@@ -91,9 +86,8 @@ classdef A8153_control < handle
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'*ESR?');
             inform = fscanf(obj.c_gpib);
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function inform = OperationCompleteStatus(obj)
             % *OPC? Operation Complete Query
@@ -101,9 +95,8 @@ classdef A8153_control < handle
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'*OPC?');
             inform = fscanf(obj.c_gpib);
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function inform = ServiceRequestEnableStatud(obj)
             % *SRE? Service Request Enable Query
@@ -111,9 +104,8 @@ classdef A8153_control < handle
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'*SRE?');
             inform = fscanf(obj.c_gpib);
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function inform = ReadStatusByte(obj)
             % *STB? Read Status Byte Query
@@ -121,9 +113,8 @@ classdef A8153_control < handle
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'*STB?');
             inform = fscanf(obj.c_gpib);
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function inform = SelfTest(obj)
             % *TST? Self Test Query
@@ -131,9 +122,8 @@ classdef A8153_control < handle
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'*TST?');
             inform = fscanf(obj.c_gpib);
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function [] = ClearStatus(obj)
             % *CLS Clear Status Command
@@ -149,9 +139,8 @@ classdef A8153_control < handle
             % *OPC/*OPC? actions are canceled.
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'*CLS');
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function [] = StdEventStatusEnable(obj, value)
             % *ESE Standard Event Status Enable Command
@@ -167,9 +156,8 @@ classdef A8153_control < handle
             % commands do not change the register.
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,['*ESE' num2str(value)]);
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function [] = OperationComplete(obj)
             % *OPC Operation Complete Command
@@ -180,17 +168,15 @@ classdef A8153_control < handle
 
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'*OPC');
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function [] = Reset(obj)
             % *RST Reset Command
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'*RST');
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function [] = ServiceRequestEnable(obj, value)
             % *SRE Service Request Enable Command
@@ -206,46 +192,40 @@ classdef A8153_control < handle
 
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,['*SRE' num2str(value)]);
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function [] = Trigger(obj)
             % *TRG Trigger Command
 
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'*TRG');
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function [] = Wait(obj)
             % *WAI Wait Command
 
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'*TRG');
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function [] = Abort(obj)
             % *WAI Wait Command
 
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'*ABOR');
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function inform = GetCurrentPower(obj)
             % *TST? Self Test Query
-
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'read1:pow?');
             inform = (str2double(fscanf(obj.c_gpib)));
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function [] = SetSenseParamiters(obj, varargin)
             % Sense commands include most of the functions for setting up
@@ -276,9 +256,8 @@ classdef A8153_control < handle
                 fprintf(obj.c_gpib,comands_list{1});
                 comands_list(1) = [];
             end
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
+
         end
         function [inform] = GetSenseParamiters(obj, varargin)
             % Sense commands include most of the functions for setting up
@@ -311,9 +290,7 @@ classdef A8153_control < handle
                 inform = fscanf(obj.c_gpib);
 
             end
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
         end
         function inform = GetCurrentError(obj)
             % get number of current error
@@ -321,9 +298,7 @@ classdef A8153_control < handle
             obj.OpenIfNeed();
             fprintf(obj.c_gpib,'syst:err?');
             inform = fscanf(obj.c_gpib);
-            if obj.close_port
-                fclose(obj.c_gpib);
-            end
+            obj.CloseIfNeed();
         end
         function state = isopen(obj)
             % return true if port is open and false of closed
@@ -347,7 +322,7 @@ classdef A8153_control < handle
                 obj.Fclose();
             end
         end
-        
+
     end %methods
 end
 
