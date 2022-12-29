@@ -6,8 +6,8 @@ classdef A8153_control < handle
         close_port % open and close connection for each command
     end
     methods
-        function obj = A8153_control(boardindex,primaryaddress, varargin)
-            obj.c_gpib = gpib('ni', boardindex, primaryaddress);
+        function obj = A8153_control(resourceName, varargin)
+            obj.c_gpib = visadev(resourceName);
             obj.close_port = false;
             while ~isempty(varargin)
                 switch lower(varargin{1})
