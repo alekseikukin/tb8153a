@@ -76,8 +76,8 @@ classdef A8153_control < handle
             % *ESE? Standard Event Status Enable Query
 
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'*ESE?');
-            inform = fscanf(obj.c_gpib);
+             inform = writeread(obj.c_gpib,'*ESE?');
+%             inform = fscanf(obj.c_gpib);
             obj.CloseIfNeed();
 
         end
@@ -85,8 +85,8 @@ classdef A8153_control < handle
             % *ESR? Standard Event Status Register Query
 
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'*ESR?');
-            inform = fscanf(obj.c_gpib);
+             inform = writeread(obj.c_gpib,'*ESR?');
+%             inform = fscanf(obj.c_gpib);
             obj.CloseIfNeed();
 
         end
@@ -94,8 +94,8 @@ classdef A8153_control < handle
             % *OPC? Operation Complete Query
 
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'*OPC?');
-            inform = fscanf(obj.c_gpib);
+             inform = writeread(obj.c_gpib,'*OPC?');
+%             inform = fscanf(obj.c_gpib);
             obj.CloseIfNeed();
 
         end
@@ -103,8 +103,8 @@ classdef A8153_control < handle
             % *SRE? Service Request Enable Query
 
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'*SRE?');
-            inform = fscanf(obj.c_gpib);
+             inform = writeread(obj.c_gpib,'*SRE?');
+%             inform = fscanf(obj.c_gpib);
             obj.CloseIfNeed();
 
         end
@@ -112,8 +112,8 @@ classdef A8153_control < handle
             % *STB? Read Status Byte Query
 
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'*STB?');
-            inform = fscanf(obj.c_gpib);
+             inform = writeread(obj.c_gpib,'*STB?');
+%             inform = fscanf(obj.c_gpib);
             obj.CloseIfNeed();
 
         end
@@ -121,8 +121,8 @@ classdef A8153_control < handle
             % *TST? Self Test Query
 
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'*TST?');
-            inform = fscanf(obj.c_gpib);
+             inform = writeread(obj.c_gpib,'*TST?');
+%             inform = fscanf(obj.c_gpib);
             obj.CloseIfNeed();
 
         end
@@ -139,7 +139,7 @@ classdef A8153_control < handle
             % state. The command does not alter the instrument setting.
             % *OPC/*OPC? actions are canceled.
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'*CLS');
+            write(obj.c_gpib,'*CLS');
             obj.CloseIfNeed();
 
         end
@@ -156,7 +156,7 @@ classdef A8153_control < handle
             % The register is cleared at power-on. The *RST and *CLS
             % commands do not change the register.
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,['*ESE' num2str(value)]);
+            write(obj.c_gpib,['*ESE' num2str(value)]);
             obj.CloseIfNeed();
 
         end
@@ -168,14 +168,14 @@ classdef A8153_control < handle
             % input queue have been processed.
 
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'*OPC');
+            write(obj.c_gpib,'*OPC');
             obj.CloseIfNeed();
 
         end
         function [] = Reset(obj)
             % *RST Reset Command
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'*RST');
+            write(obj.c_gpib,'*RST');
             obj.CloseIfNeed();
 
         end
@@ -192,7 +192,7 @@ classdef A8153_control < handle
             % commands do not change the register.
 
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,['*SRE' num2str(value)]);
+            write(obj.c_gpib,['*SRE' num2str(value)]);
             obj.CloseIfNeed();
 
         end
@@ -200,7 +200,7 @@ classdef A8153_control < handle
             % *TRG Trigger Command
 
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'*TRG');
+            write(obj.c_gpib,'*TRG');
             obj.CloseIfNeed();
 
         end
@@ -208,7 +208,7 @@ classdef A8153_control < handle
             % *WAI Wait Command
 
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'*TRG');
+            write(obj.c_gpib,'*TRG');
             obj.CloseIfNeed();
 
         end
@@ -216,16 +216,16 @@ classdef A8153_control < handle
             % *WAI Wait Command
 
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'*ABOR');
+            write(obj.c_gpib,'*ABOR');
             obj.CloseIfNeed();
 
         end
         function inform = GetCurrentPower(obj)
             % *TST? Self Test Query
-            obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'read1:pow?');
-            inform = (str2double(fscanf(obj.c_gpib)));
-            obj.CloseIfNeed();
+%             obj.OpenIfNeed();
+            inform = writeread(obj.c_gpib,'read1:pow?');
+%             inform = (str2double(fscanf(obj.c_gpib)));
+%             obj.CloseIfNeed();
 
         end
         function [] = SetSenseParamiters(obj, varargin)
@@ -254,7 +254,7 @@ classdef A8153_control < handle
             end
             obj.OpenIfNeed();
             while ~isempty(comands_list)
-                fprintf(obj.c_gpib,comands_list{1});
+                write(obj.c_gpib,comands_list{1});
                 comands_list(1) = [];
             end
             obj.CloseIfNeed();
@@ -286,9 +286,9 @@ classdef A8153_control < handle
             end
             obj.OpenIfNeed();
             while ~isempty(comands_list)
-                fprintf(obj.c_gpib,comands_list{1});
+                 inform = writeread(obj.c_gpib,comands_list{1});
                 comands_list(1) = [];
-                inform = fscanf(obj.c_gpib);
+%                 inform = fscanf(obj.c_gpib);
 
             end
             obj.CloseIfNeed();
@@ -297,8 +297,8 @@ classdef A8153_control < handle
             % get number of current error
 
             obj.OpenIfNeed();
-            fprintf(obj.c_gpib,'syst:err?');
-            inform = fscanf(obj.c_gpib);
+             inform = writeread(obj.c_gpib,'syst:err?');
+%             inform = fscanf(obj.c_gpib);
             obj.CloseIfNeed();
         end
         function state = isopen(obj)
