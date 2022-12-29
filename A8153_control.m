@@ -1,6 +1,7 @@
 classdef A8153_control < handle
     properties
         c_gpib
+        dev_id
     end
     properties(SetAccess = private)
         close_port % open and close connection for each command
@@ -18,15 +19,15 @@ classdef A8153_control < handle
                 end
                 varargin(1:2) = [];
             end
-            if ~obj.isopen()
-                fopen(obj.c_gpib);
-            else
-                disp('Port was open already!!!');
-            end
-            fprintf(obj.c_gpib,'*IDN?');
-            int_result = fscanf(obj.c_gpib);
-            disp(int_result);
-            obj.CloseIfNeed();
+%             if ~obj.isopen()
+%                 fopen(obj.c_gpib);
+%             else
+%                 disp('Port was open already!!!');
+%             end
+           dev_id =  writeread(obj.c_gpib,'*IDN?')
+%             int_result = fscanf(obj.c_gpib);
+%             disp(int_result);
+%             obj.CloseIfNeed();
 
         end
         function inform = IDN(obj)
@@ -48,13 +49,13 @@ classdef A8153_control < handle
                 error('you need write 1 or more comands')
             end
             while ~isempty(varargin)
-                satus = fprintf(obj.c_gpib, varargin{1});
+                satus = write(obj.c_gpib, varargin{1});
                 varargin{1} = [];
             end
         end
         function inform = Fscanf(obj)
             %Fscanf - return data from bufer of device
-            inform = fscanf(obj.c_gpib);
+            inform = read(obj.c_gpib);
         end
         function info = Fopen(obj)
             %Fopen - connect to device
